@@ -93,8 +93,38 @@
 * `--allow-write`：書き込み許可（設定より強い/弱い優先順位は後述）
 * `--workspace <path>`：workspace rootの明示指定（デフォルト：CWD）
 * `--log-level <debug|info|warn|error>`
+* `--schema <path>`：単独スキーマファイルを指定（単独モード）
+* `--csv <path>`：CSVファイルパス（`--schema`と併用、省略時はスキーマと同名の.csvを探索）
 
-### 5.3 終了
+### 5.3 単独モード
+
+`--schema` オプションを指定すると、設定ファイル不要で単独のデータセットを編集できます。
+
+```bash
+# スキーマファイルを指定（CSVは自動探索）
+npx csv-cms --schema schemas/product.schema.yaml
+
+# CSVファイルも明示指定
+npx csv-cms --schema schemas/product.schema.yaml --csv data/products.csv
+
+# 書き込み許可も付与
+npx csv-cms --schema schemas/product.schema.yaml --allow-write
+```
+
+**単独モードの特徴**:
+
+* サイドバーは非表示（単独データセットのため不要）
+* ナビゲーションバーにはHomeボタンの代わりにデータセットアイコン＋データセット名を表示
+* テーブルエリアとフォームエリアのみのシンプルなレイアウト
+* 起動時に直接データセット編集画面を表示（ホーム画面をスキップ）
+
+**CSVパスの自動探索**:
+
+* `--csv` を省略した場合、スキーマファイルと同じディレクトリで同じベース名の `.csv` ファイルを探索
+* 例: `schemas/product.schema.yaml` → `schemas/product.csv`
+* 見つからない場合はエラーとなり、`--csv` での明示指定を促す
+
+### 5.4 終了
 
 * Ctrl+Cで正常終了
 * 終了時、未保存変更がある場合はSPA側で警告（サーバ側は状態保持しない）

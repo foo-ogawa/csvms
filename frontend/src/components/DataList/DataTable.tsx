@@ -1,6 +1,6 @@
 // データテーブルコンポーネント
 
-import React, { useMemo, useRef, useCallback } from 'react';
+import React, { useMemo, useRef, useCallback, useEffect, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Tag, Dropdown } from 'antd';
 import {
@@ -10,26 +10,34 @@ import {
   DeleteOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
+  HolderOutlined,
 } from '@ant-design/icons';
 import type { Schema, Row, ValidationError } from '@/api/types';
 import type { InsertPosition } from '@/stores/datasetStore';
 
+// 拡張Row型（_arrayIndexを持つ）
+type RowWithArrayIndex = Row & { _arrayIndex: number };
+
 interface DataTableProps {
   schema: Schema;
-  rows: Row[];
-  selectedRowIndex: number | null;
+  rows: RowWithArrayIndex[];
+  selectedRowIndex: number | null; // 表示上のインデックス
   errors: ValidationError[];
-  onRowSelect: (index: number | null) => void;
+  onRowSelect: (arrayIndex: number | null) => void; // 元のrows配列のインデックスを返す
   onSort: (columnKey: string, order: 'asc' | 'desc') => void;
   sortColumn: string | null;
   sortOrder: 'asc' | 'desc';
   onDuplicate: (index: number) => void;
   onDelete: (index: number) => void;
   onInsert: (position: InsertPosition) => void;
+  onMoveRow?: (fromIndex: number, toIndex: number) => void;
+  onSelectNext?: () => void;
+  onSelectPrev?: () => void;
 }
 
 const ROW_HEIGHT = 44;
 const INDEX_COLUMN_WIDTH = 60;
+const DRAG_HANDLE_WIDTH = 32;
 
 export const DataTable: React.FC<DataTableProps> = ({
   schema,
@@ -43,8 +51,14 @@ export const DataTable: React.FC<DataTableProps> = ({
   onDuplicate,
   onDelete,
   onInsert,
+  onMoveRow,
+  onSelectNext,
+  onSelectPrev,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLDivElement>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   // 表示するカラムを取得
   const columns = useMemo(() => {
@@ -60,8 +74,9 @@ export const DataTable: React.FC<DataTableProps> = ({
 
   // テーブル全体の幅を計算
   const totalWidth = useMemo(() => {
-    return INDEX_COLUMN_WIDTH + columns.reduce((sum, col) => sum + col.width, 0);
-  }, [columns]);
+    const dragHandleWidth = onMoveRow ? DRAG_HANDLE_WIDTH : 0;
+    return dragHandleWidth + INDEX_COLUMN_WIDTH + columns.reduce((sum, col) => sum + col.width, 0);
+  }, [columns, onMoveRow]);
 
   // 行のエラー情報
   const rowErrors = useMemo(() => {
@@ -84,10 +99,85 @@ export const DataTable: React.FC<DataTableProps> = ({
 
   const virtualRows = virtualizer.getVirtualItems();
 
-  // 行クリック
+  // キーボードナビゲーション
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // フォーカスがテーブル内にあるか、フォーカスがbody（どこにもフォーカスがない）の場合
+      const target = e.target as HTMLElement;
+      const isInputFocused = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
+      
+      if (isInputFocused) return;
+      
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        onSelectNext?.();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        onSelectPrev?.();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onSelectNext, onSelectPrev]);
+
+  // 選択行が変わったらスクロールして表示
+  useEffect(() => {
+    if (selectedRowIndex !== null && scrollRef.current) {
+      virtualizer.scrollToIndex(selectedRowIndex, { align: 'auto' });
+    }
+  }, [selectedRowIndex, virtualizer]);
+
+  // ドラッグ開始
+  const handleDragStart = useCallback((e: React.DragEvent, index: number) => {
+    setDragIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(index));
+    // ドラッグ画像を設定（行全体ではなく小さいインジケータ）
+    const dragImage = document.createElement('div');
+    dragImage.className = 'drag-image';
+    dragImage.textContent = `行 ${index + 1}`;
+    dragImage.style.cssText = 'position: absolute; top: -1000px; padding: 8px 16px; background: #1677ff; color: white; border-radius: 4px; font-size: 12px;';
+    document.body.appendChild(dragImage);
+    e.dataTransfer.setDragImage(dragImage, 0, 0);
+    setTimeout(() => document.body.removeChild(dragImage), 0);
+  }, []);
+
+  // ドラッグオーバー
+  const handleDragOver = useCallback((e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragIndex !== null && index !== dragIndex) {
+      setDragOverIndex(index);
+    }
+  }, [dragIndex]);
+
+  // ドラッグリーブ
+  const handleDragLeave = useCallback(() => {
+    setDragOverIndex(null);
+  }, []);
+
+  // ドロップ
+  const handleDrop = useCallback((e: React.DragEvent, toIndex: number) => {
+    e.preventDefault();
+    if (dragIndex !== null && dragIndex !== toIndex && onMoveRow) {
+      onMoveRow(dragIndex, toIndex);
+    }
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }, [dragIndex, onMoveRow]);
+
+  // ドラッグ終了
+  const handleDragEnd = useCallback(() => {
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }, []);
+
+  // 行クリック - _arrayIndex（元のrows配列のインデックス）を返す
   const handleRowClick = useCallback(
-    (index: number) => {
-      onRowSelect(selectedRowIndex === index ? null : index);
+    (displayIndex: number, arrayIndex: number) => {
+      // 既に選択されている行をクリックした場合は選択解除
+      onRowSelect(selectedRowIndex === displayIndex ? null : arrayIndex);
     },
     [selectedRowIndex, onRowSelect]
   );
@@ -164,12 +254,33 @@ export const DataTable: React.FC<DataTableProps> = ({
     },
   ];
 
+  // #列のソートをハンドル
+  const handleIndexHeaderClick = useCallback(() => {
+    const newOrder = sortColumn === '_index' && sortOrder === 'asc' ? 'desc' : 'asc';
+    onSort('_index', newOrder);
+  }, [sortColumn, sortOrder, onSort]);
+
   return (
-    <div className="data-table-wrapper">
+    <div className="data-table-wrapper" ref={tableRef} tabIndex={0}>
       {/* ヘッダー（固定） */}
       <div className="data-table-header" style={{ minWidth: totalWidth }}>
-        <div className="table-cell header-cell" style={{ width: INDEX_COLUMN_WIDTH, minWidth: INDEX_COLUMN_WIDTH }}>
-          #
+        {onMoveRow && (
+          <div className="table-cell header-cell" style={{ width: DRAG_HANDLE_WIDTH, minWidth: DRAG_HANDLE_WIDTH }}>
+            
+          </div>
+        )}
+        <div 
+          className="table-cell header-cell sortable" 
+          style={{ width: INDEX_COLUMN_WIDTH, minWidth: INDEX_COLUMN_WIDTH }}
+          onClick={handleIndexHeaderClick}
+        >
+          <span>#</span>
+          {sortColumn === '_index' &&
+            (sortOrder === 'asc' ? (
+              <SortAscendingOutlined style={{ color: '#1677ff', marginLeft: 4 }} />
+            ) : (
+              <SortDescendingOutlined style={{ color: '#1677ff', marginLeft: 4 }} />
+            ))}
         </div>
         {columns.map((col) => (
           <div
@@ -201,6 +312,8 @@ export const DataTable: React.FC<DataTableProps> = ({
           {virtualRows.map((virtualRow) => {
             const row = rows[virtualRow.index];
             const rowIndex = virtualRow.index;
+            const isDragging = dragIndex === rowIndex;
+            const isDragOver = dragOverIndex === rowIndex;
 
             return (
               <Dropdown
@@ -209,7 +322,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 trigger={['contextMenu']}
               >
                 <div
-                  className={getRowClassName(row, rowIndex)}
+                  className={`${getRowClassName(row, rowIndex)}${isDragging ? ' row-dragging' : ''}${isDragOver ? ' row-drag-over' : ''}`}
                   style={{
                     position: 'absolute',
                     top: 0,
@@ -217,9 +330,24 @@ export const DataTable: React.FC<DataTableProps> = ({
                     width: '100%',
                     height: ROW_HEIGHT,
                     transform: `translateY(${virtualRow.start}px)`,
+                    opacity: isDragging ? 0.5 : 1,
                   }}
-                  onClick={() => handleRowClick(rowIndex)}
+                  onClick={() => handleRowClick(rowIndex, row._arrayIndex)}
+                  onDragOver={(e) => handleDragOver(e, rowIndex)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, rowIndex)}
                 >
+                  {onMoveRow && (
+                    <div
+                      className="table-cell drag-handle"
+                      style={{ width: DRAG_HANDLE_WIDTH, minWidth: DRAG_HANDLE_WIDTH, cursor: 'grab' }}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, rowIndex)}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <HolderOutlined style={{ color: '#bfbfbf' }} />
+                    </div>
+                  )}
                   <div
                     className="table-cell"
                     style={{ width: INDEX_COLUMN_WIDTH, minWidth: INDEX_COLUMN_WIDTH, color: '#8c8c8c', fontSize: 12 }}

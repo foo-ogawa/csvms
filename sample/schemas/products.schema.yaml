@@ -9,9 +9,6 @@ csv:
   header: true
   primaryKey: product_id
   normalize:
-    sortKeys:
-      - column: product_id
-        order: asc
     quotePolicy: minimal
     newline: lf
     encoding: utf-8

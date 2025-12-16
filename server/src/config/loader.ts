@@ -52,10 +52,133 @@ function validateConfig(rawConfig: unknown): Config {
 }
 
 /**
+ * スキーマファイルからタイトルを取得
+ */
+async function loadSchemaTitle(schemaPath: string): Promise<{ id: string; title: string }> {
+  const content = await fs.readFile(schemaPath, 'utf-8');
+  const schema = YAML.parse(content);
+  return {
+    id: schema.id || path.basename(schemaPath, path.extname(schemaPath)),
+    title: schema.title || path.basename(schemaPath, path.extname(schemaPath)),
+  };
+}
+
+/**
+ * 2つのパスの共通の親ディレクトリを取得
+ */
+function getCommonAncestor(path1: string, path2: string): string {
+  const parts1 = path1.split(path.sep);
+  const parts2 = path2.split(path.sep);
+  const commonParts: string[] = [];
+
+  for (let i = 0; i < Math.min(parts1.length, parts2.length); i++) {
+    if (parts1[i] === parts2[i]) {
+      commonParts.push(parts1[i]);
+    } else {
+      break;
+    }
+  }
+
+  return commonParts.join(path.sep) || path.sep;
+}
+
+/**
+ * 単独モード設定を生成
+ */
+async function loadSingleModeConfig(options: ServerOptions): Promise<ResolvedConfig> {
+  const schemaPath = path.resolve(options.schema!);
+
+  // スキーマファイルの存在確認
+  try {
+    await fs.access(schemaPath);
+  } catch {
+    throw new Error(`Schema file not found: ${schemaPath}`);
+  }
+
+  // CSVパスを決定（指定がなければスキーマと同じ名前の.csv）
+  let csvPath: string;
+  if (options.csv) {
+    csvPath = path.resolve(options.csv);
+  } else {
+    const schemaDir = path.dirname(schemaPath);
+    const schemaBasename = path.basename(schemaPath);
+    // .schema.yaml, .schema.yml, .yaml, .yml を除去して .csv に変換
+    const csvBasename = schemaBasename
+      .replace(/\.schema\.(yaml|yml|json)$/i, '.csv')
+      .replace(/\.(yaml|yml|json)$/i, '.csv');
+    csvPath = path.join(schemaDir, csvBasename);
+  }
+
+  // CSVファイルの存在確認
+  try {
+    await fs.access(csvPath);
+  } catch {
+    throw new Error(`CSV file not found: ${csvPath}. Use --csv to specify the CSV file path.`);
+  }
+
+  // スキーマからタイトルを取得
+  const { id, title } = await loadSchemaTitle(schemaPath);
+
+  // ワークスペースルートを決定
+  // 明示的に指定されていない場合は、CSVとスキーマの共通の親ディレクトリを使用
+  let workspaceRoot: string;
+  if (options.workspace) {
+    workspaceRoot = path.resolve(options.workspace);
+  } else {
+    // CSVとスキーマファイルの共通の親ディレクトリを取得
+    workspaceRoot = getCommonAncestor(path.dirname(csvPath), path.dirname(schemaPath));
+  }
+
+  // 書き込み許可を決定
+  let allowWrite = false;
+  if (options.readOnly === true) {
+    allowWrite = false;
+  } else if (options.allowWrite === true) {
+    allowWrite = true;
+  }
+
+  // CSVパスとスキーマパスを相対パスに変換
+  const relativeCsvPath = path.relative(workspaceRoot, csvPath);
+  const relativeSchemaPath = path.relative(workspaceRoot, schemaPath);
+
+  return {
+    version: 1,
+    configPath: `--schema ${schemaPath}`,
+    workspace: {
+      root: workspaceRoot,
+      allowWrite,
+      allowGlobs: ['**/*.csv', '**/*.yaml', '**/*.yml', '**/*.json'],
+      denyGlobs: ['**/node_modules/**', '**/.git/**'],
+    },
+    datasets: [
+      {
+        id,
+        title,
+        csvPath: relativeCsvPath,
+        schemaPath: relativeSchemaPath,
+      },
+    ],
+    serverOptions: {
+      port: options.port ?? 0,
+      host: options.host ?? '127.0.0.1',
+      open: options.open !== false,
+      logLevel: options.logLevel ?? 'info',
+    },
+    singleMode: true,
+    singleDataset: { id, title },
+  };
+}
+
+/**
  * 設定をロード
  */
 export async function loadConfig(options: ServerOptions): Promise<ResolvedConfig> {
-  // 設定ファイルのパスを決定
+  // 単独モード: --schema オプションが指定された場合
+  if (options.schema) {
+    return loadSingleModeConfig(options);
+  }
+
+  // 通常モード: 設定ファイルを使用
   let configPath: string;
   if (options.config) {
     configPath = path.resolve(options.config);
@@ -105,6 +228,7 @@ export async function loadConfig(options: ServerOptions): Promise<ResolvedConfig
       open: options.open !== false,
       logLevel: options.logLevel ?? 'info',
     },
+    singleMode: false,
   };
 }
 

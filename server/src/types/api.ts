@@ -41,6 +41,12 @@ export interface ConfigData {
     id: string;
     title: string;
   }>;
+  // 単独モード情報
+  singleMode: boolean;
+  singleDataset?: {
+    id: string;
+    title: string;
+  };
 }
 
 // Datasets list endpoint

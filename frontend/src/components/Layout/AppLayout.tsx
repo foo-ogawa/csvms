@@ -19,6 +19,8 @@ export const AppLayout: React.FC = () => {
     isReadOnly,
     isLoading,
     sidebarCollapsed,
+    singleMode,
+    singleDataset,
     loadConfig,
     loadDatasets,
     setSidebarCollapsed,
@@ -86,14 +88,18 @@ export const AppLayout: React.FC = () => {
         onShowDiff={handleShowDiff}
         detailPanelVisible={detailPanelVisible}
         onToggleDetailPanel={toggleDetailPanel}
+        singleMode={singleMode}
+        singleDataset={singleDataset}
       />
       <Layout>
-        <Sidebar
-          collapsed={sidebarCollapsed}
-          onCollapse={setSidebarCollapsed}
-          datasets={datasets}
-          currentId={datasetId}
-        />
+        {!singleMode && (
+          <Sidebar
+            collapsed={sidebarCollapsed}
+            onCollapse={setSidebarCollapsed}
+            datasets={datasets}
+            currentId={datasetId}
+          />
+        )}
         <Content className="app-content">
           <Outlet />
         </Content>

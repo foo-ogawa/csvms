@@ -11,12 +11,15 @@ import {
 import type { Schema, Row, ValidationError } from '@/api/types';
 import type { InsertPosition } from '@/stores/datasetStore';
 
+// 拡張Row型（_arrayIndexを持つ）
+type RowWithArrayIndex = Row & { _arrayIndex: number };
+
 interface DataTileGridProps {
   schema: Schema;
-  rows: Row[];
-  selectedRowIndex: number | null;
+  rows: RowWithArrayIndex[];
+  selectedRowIndex: number | null; // 表示上のインデックス
   errors: ValidationError[];
-  onRowSelect: (index: number | null) => void;
+  onRowSelect: (arrayIndex: number | null) => void; // 元のrows配列のインデックスを返す
   onDuplicate: (index: number) => void;
   onDelete: (index: number) => void;
   onInsert: (position: InsertPosition) => void;
@@ -121,7 +124,7 @@ export const DataTileGrid: React.FC<DataTileGridProps> = ({
             <Card
               className={getTileClassName(row, index)}
               onClick={() =>
-                onRowSelect(selectedRowIndex === index ? null : index)
+                onRowSelect(selectedRowIndex === index ? null : row._arrayIndex)
               }
               size="small"
             >

@@ -31,10 +31,12 @@ export const DatasetPage: React.FC = () => {
     insertRow,
     duplicateRow,
     deleteRow,
+    moveRow,
     selectRow,
     setViewMode,
     setSearchQuery,
     setSortColumn,
+    resetSort,
     resetChanges,
     reload,
     setDetailPanelWidth,
@@ -137,7 +139,9 @@ export const DatasetPage: React.FC = () => {
           onInsert={insertRow}
           onDuplicate={duplicateRow}
           onDelete={deleteRow}
+          onMoveRow={moveRow}
           onSort={setSortColumn}
+          onResetSort={resetSort}
           onQuickSearch={setSearchQuery}
           onViewModeChange={setViewMode}
           onResetChanges={resetChanges}

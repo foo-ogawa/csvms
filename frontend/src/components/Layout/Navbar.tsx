@@ -8,6 +8,7 @@ import {
   SaveOutlined,
   DiffOutlined,
   DatabaseOutlined,
+  TableOutlined,
   LockOutlined,
   ExclamationCircleOutlined,
   MenuFoldOutlined,
@@ -22,6 +23,9 @@ interface NavbarProps {
   onShowDiff: () => void;
   detailPanelVisible?: boolean;
   onToggleDetailPanel?: () => void;
+  // 単独モード
+  singleMode?: boolean;
+  singleDataset?: { id: string; title: string } | null;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -32,25 +36,40 @@ export const Navbar: React.FC<NavbarProps> = ({
   onShowDiff,
   detailPanelVisible,
   onToggleDetailPanel,
+  singleMode = false,
+  singleDataset = null,
 }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  // 単独モードではデータセットページかどうかに関わらず保存ボタン等を表示
+  const showDatasetControls = singleMode || !isHomePage;
 
   return (
     <header className="app-header">
       <div className="app-header-left">
-        <Link to="/" className="logo">
-          <DatabaseOutlined />
-          <span>CSV CMS</span>
-        </Link>
-        {!isHomePage && (
-          <Tooltip title="ホームに戻る">
-            <Link to="/">
-              <Button type="text" icon={<HomeOutlined />}>
-                Home
-              </Button>
+        {singleMode ? (
+          // 単独モード: データセットアイコン + データセット名
+          <div className="logo single-mode-title">
+            <TableOutlined />
+            <span>{singleDataset?.title || 'Dataset'}</span>
+          </div>
+        ) : (
+          // 通常モード: CSV CMS ロゴ + Homeボタン
+          <>
+            <Link to="/" className="logo">
+              <DatabaseOutlined />
+              <span>CSV CMS</span>
             </Link>
-          </Tooltip>
+            {!isHomePage && (
+              <Tooltip title="ホームに戻る">
+                <Link to="/">
+                  <Button type="text" icon={<HomeOutlined />}>
+                    Home
+                  </Button>
+                </Link>
+              </Tooltip>
+            )}
+          </>
         )}
       </div>
       <div className="app-header-right">
@@ -65,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               読み取り専用
             </Tag>
           )}
-          {!isHomePage && (
+          {showDatasetControls && (
             <>
               <Tooltip title="変更内容を確認">
                 <Button

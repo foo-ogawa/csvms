@@ -17,6 +17,8 @@ program
   .option('--allow-write', 'Allow write operations')
   .option('--workspace <path>', 'Workspace root path')
   .option('--log-level <level>', 'Log level (debug|info|warn|error)', 'info')
+  .option('--schema <path>', 'Single schema file path (enables single dataset mode)')
+  .option('--csv <path>', 'CSV file path (optional with --schema, defaults to same name as schema)')
   .action(async (options) => {
     await startServer({
       config: options.config,
@@ -27,6 +29,8 @@ program
       allowWrite: options.allowWrite,
       workspace: options.workspace,
       logLevel: options.logLevel,
+      schema: options.schema,
+      csv: options.csv,
     });
   });
 

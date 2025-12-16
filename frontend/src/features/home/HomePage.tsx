@@ -1,7 +1,7 @@
 // Home画面コンポーネント
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Card, Tag, Spin, Empty } from 'antd';
 import {
   TableOutlined,
@@ -16,7 +16,7 @@ import { useAppStore } from '@/stores/appStore';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { config, datasets, isLoading } = useAppStore();
+  const { config, datasets, isLoading, singleMode, singleDataset } = useAppStore();
 
   if (isLoading || !config) {
     return (
@@ -26,6 +26,11 @@ export const HomePage: React.FC = () => {
         </Spin>
       </div>
     );
+  }
+
+  // 単独モードの場合、データセットページに即座にリダイレクト
+  if (singleMode && singleDataset) {
+    return <Navigate to={`/datasets/${singleDataset.id}`} replace />;
   }
 
   return (

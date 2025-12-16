@@ -20,6 +20,8 @@ export function createConfigRouter(config: ResolvedConfig) {
           id: d.id,
           title: d.title,
         })),
+        singleMode: config.singleMode,
+        singleDataset: config.singleDataset,
       },
     };
     res.json(response);

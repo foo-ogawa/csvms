@@ -4,6 +4,8 @@
 
 Git差分が見やすく安定するよう、保存時にCSVを正規化（列順・改行・クォート・ソート等）します。
 
+![データセット編集画面](docs/images/datasets.png)
+
 ## 特徴
 
 - 🖥️ **CMS風UI** - 一覧表示と詳細フォームでCSVを直感的に編集
@@ -11,6 +13,30 @@ Git差分が見やすく安定するよう、保存時にCSVを正規化（列�
 - 🔄 **Git差分安定** - 保存時にCSVを正規化してGit差分を最小化
 - 🔒 **安全設計** - Workspace外へのアクセス禁止、パストラバーサル対策
 - ⚡ **簡単起動** - `npx`一発で起動（リポジトリclone不要）
+
+## スクリーンショット
+
+### ホーム画面
+
+設定ファイルのプレビューとデータセット一覧を表示します。
+
+![ホーム画面](docs/images/home.png)
+
+### データセット編集画面
+
+テーブル/タイル表示と詳細フォームでCSVを編集できます。ドラッグ＆ドロップでの行並べ替え、キーボードナビゲーションにも対応。
+
+![データセット編集画面](docs/images/datasets.png)
+
+### 単独モード
+
+`--schema`オプションで設定ファイル不要の単独データセット編集が可能です。サイドバーが非表示になり、シンプルなレイアウトで表示されます。
+
+```bash
+npx csv-cms --schema schemas/product.schema.yaml --allow-write
+```
+
+![単独モード](docs/images/single-dataset.png)
 
 ## クイックスタート
 
@@ -63,12 +89,6 @@ version: 1
 workspace:
   root: "."
   allowWrite: true
-  allowGlobs:
-    - "data/**/*.csv"
-    - "schemas/**/*.{yml,yaml}"
-  denyGlobs:
-    - "**/node_modules/**"
-    - "**/.git/**"
 
 datasets:
   - id: "product_master"
@@ -91,8 +111,6 @@ csv:
   header: true
   primaryKey: "product_id"
   normalize:
-    sortKeys:
-      - { column: "product_id", order: "asc" }
     quotePolicy: "minimal"
     newline: "lf"
 
@@ -102,7 +120,6 @@ columns:
     type: string
     required: true
     unique: true
-    pattern: "^[A-Z0-9_-]{3,32}$"
     ui: { widget: text, readonlyOnEdit: true }
 
   - key: name
@@ -117,7 +134,17 @@ columns:
     required: true
     min: 0
     ui: { widget: number }
+
+ui:
+  list:
+    columns:
+      - { key: product_id, width: 160 }
+      - { key: name, width: 280 }
+      - { key: price, width: 120, align: right }
 ```
+
+> 📖 **詳細な設定仕様は [docs/CONFIGURATION.md](docs/CONFIGURATION.md) を参照してください。**  
+> データ型、バリデーション、UIウィジェット、行ルール式など全ての設定項目を網羅しています。
 
 ## 開発
 
@@ -156,6 +183,15 @@ csvcms/
 │   └── schemas/
 └── docs/              # ドキュメント
 ```
+
+## ドキュメント
+
+| ドキュメント | 説明 |
+|-------------|------|
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | **設定ファイル・スキーマの詳細仕様** - 全ての設定項目を網羅 |
+| [docs/README.md](docs/README.md) | 要求仕様・設計ドキュメント |
+| [docs/API.md](docs/API.md) | REST API仕様 |
+| [docs/FRONTEND.md](docs/FRONTEND.md) | フロントエンド実装仕様 |
 
 ## ライセンス
 

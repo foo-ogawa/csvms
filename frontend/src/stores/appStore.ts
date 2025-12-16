@@ -11,6 +11,9 @@ interface AppState {
   isLoading: boolean;
   error: Error | null;
   sidebarCollapsed: boolean;
+  // 単独モード
+  singleMode: boolean;
+  singleDataset: { id: string; title: string } | null;
 
   // Actions
   loadConfig: () => Promise<void>;
@@ -26,6 +29,8 @@ export const useAppStore = create<AppState>((set) => ({
   isLoading: false,
   error: null,
   sidebarCollapsed: false,
+  singleMode: false,
+  singleDataset: null,
 
   loadConfig: async () => {
     set({ isLoading: true, error: null });
@@ -35,6 +40,8 @@ export const useAppStore = create<AppState>((set) => ({
         set({
           config: response.data,
           isReadOnly: !response.data.workspace.allowWrite,
+          singleMode: response.data.singleMode,
+          singleDataset: response.data.singleDataset || null,
           isLoading: false,
         });
       }

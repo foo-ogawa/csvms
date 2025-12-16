@@ -27,6 +27,12 @@ export interface ConfigResponse {
     id: string;
     title: string;
   }[];
+  // 単独モード情報
+  singleMode: boolean;
+  singleDataset?: {
+    id: string;
+    title: string;
+  };
 }
 
 // Dataset一覧

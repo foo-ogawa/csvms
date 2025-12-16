@@ -9,11 +9,6 @@ csv:
   header: true
   primaryKey: category_id
   normalize:
-    sortKeys:
-      - column: sort_order
-        order: asc
-      - column: category_id
-        order: asc
     quotePolicy: minimal
     newline: lf
     encoding: utf-8
@@ -91,7 +86,7 @@ ui:
       type: sections
       sections:
         - title: 基本情報
-          columns: 2
+          columns: 1
           fields:
             - category_id
             - name

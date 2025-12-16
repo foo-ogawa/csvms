@@ -39,11 +39,15 @@ interface DatasetState {
   insertRow: (position: InsertPosition) => void;
   duplicateRow: (index: number) => void;
   deleteRow: (index: number) => void;
+  moveRow: (fromIndex: number, toIndex: number) => void;
   selectRow: (index: number | null) => void;
+  selectNextRow: () => void;
+  selectPrevRow: () => void;
   validate: () => Promise<ValidationError[]>;
   save: () => Promise<{ success: boolean; error?: string }>;
   reload: () => Promise<void>;
   resetChanges: () => void;
+  resetSort: () => void;
   setViewMode: (mode: 'table' | 'tile') => void;
   setSearchQuery: (query: string) => void;
   setSortColumn: (column: string | null, order: 'asc' | 'desc') => void;
@@ -182,10 +186,13 @@ export const useDatasetStore = create<DatasetState>((set, get) => ({
         break;
     }
 
+    // 行を挿入する際はソートをリセットして、指定位置に表示されるようにする
     set({
       rows: newRows,
       selectedRowIndex: insertIndex,
       isDirty: checkDirty(newRows, originalRows, meta.schema),
+      sortColumn: null,
+      sortOrder: 'asc',
     });
   },
 
@@ -210,10 +217,13 @@ export const useDatasetStore = create<DatasetState>((set, get) => ({
     const newRows = [...rows];
     newRows.splice(index + 1, 0, newRow);
 
+    // 複製時もソートをリセット
     set({
       rows: newRows,
       selectedRowIndex: index + 1,
       isDirty: checkDirty(newRows, originalRows, meta.schema),
+      sortColumn: null,
+      sortOrder: 'asc',
     });
   },
 
@@ -237,8 +247,61 @@ export const useDatasetStore = create<DatasetState>((set, get) => ({
     });
   },
 
+  moveRow: (fromIndex: number, toIndex: number) => {
+    const { rows, originalRows, meta, selectedRowIndex } = get();
+    if (!meta || fromIndex === toIndex) return;
+
+    const newRows = [...rows];
+    const [movedRow] = newRows.splice(fromIndex, 1);
+    movedRow._isDirty = true;
+    newRows.splice(toIndex, 0, movedRow);
+
+    // 選択行のインデックスを更新
+    let newSelectedIndex = selectedRowIndex;
+    if (selectedRowIndex === fromIndex) {
+      newSelectedIndex = toIndex;
+    } else if (selectedRowIndex !== null) {
+      if (fromIndex < selectedRowIndex && toIndex >= selectedRowIndex) {
+        newSelectedIndex = selectedRowIndex - 1;
+      } else if (fromIndex > selectedRowIndex && toIndex <= selectedRowIndex) {
+        newSelectedIndex = selectedRowIndex + 1;
+      }
+    }
+
+    // ソートをリセットして移動した位置を維持
+    set({
+      rows: newRows,
+      selectedRowIndex: newSelectedIndex,
+      isDirty: checkDirty(newRows, originalRows, meta.schema),
+      sortColumn: null,
+      sortOrder: 'asc',
+    });
+  },
+
   selectRow: (index: number | null) => {
     set({ selectedRowIndex: index });
+  },
+
+  selectNextRow: () => {
+    const { rows, selectedRowIndex } = get();
+    if (rows.length === 0) return;
+
+    if (selectedRowIndex === null) {
+      set({ selectedRowIndex: 0 });
+    } else if (selectedRowIndex < rows.length - 1) {
+      set({ selectedRowIndex: selectedRowIndex + 1 });
+    }
+  },
+
+  selectPrevRow: () => {
+    const { rows, selectedRowIndex } = get();
+    if (rows.length === 0) return;
+
+    if (selectedRowIndex === null) {
+      set({ selectedRowIndex: rows.length - 1 });
+    } else if (selectedRowIndex > 0) {
+      set({ selectedRowIndex: selectedRowIndex - 1 });
+    }
   },
 
   validate: async () => {
@@ -335,6 +398,10 @@ export const useDatasetStore = create<DatasetState>((set, get) => ({
       isDirty: false,
       selectedRowIndex: null,
     });
+  },
+
+  resetSort: () => {
+    set({ sortColumn: null, sortOrder: 'asc' });
   },
 
   setViewMode: (mode) => set({ viewMode: mode }),

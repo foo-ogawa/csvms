@@ -29,6 +29,9 @@ export interface ServerOptions {
   allowWrite?: boolean;
   workspace?: string;
   logLevel?: string;
+  // 単独モード用オプション
+  schema?: string;
+  csv?: string;
 }
 
 export interface ResolvedConfig extends Config {
@@ -38,6 +41,12 @@ export interface ResolvedConfig extends Config {
     host: string;
     open: boolean;
     logLevel: string;
+  };
+  // 単独モード: スキーマファイル直接指定時
+  singleMode: boolean;
+  singleDataset?: {
+    id: string;
+    title: string;
   };
 }
 
