@@ -11,8 +11,8 @@ import {
   TableOutlined,
   LockOutlined,
   ExclamationCircleOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  LeftSquareOutlined,
+  RightSquareOutlined,
 } from '@ant-design/icons';
 
 interface NavbarProps {
@@ -106,7 +106,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </Button>
               <Tooltip title={detailPanelVisible ? '詳細パネルを閉じる' : '詳細パネルを開く'}>
                 <Button
-                  icon={detailPanelVisible ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                  icon={detailPanelVisible ? <RightSquareOutlined /> : <LeftSquareOutlined />}
                   onClick={onToggleDetailPanel}
                 />
               </Tooltip>
