@@ -1,6 +1,6 @@
-# CSV CMS Frontend
+# CSVMS Frontend
 
-CSV CMS のフロントエンドアプリケーション（モック版）
+CSVMS のフロントエンドアプリケーション（モック版）
 
 ## 技術スタック
 

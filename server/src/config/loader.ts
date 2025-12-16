@@ -7,12 +7,12 @@ import { ConfigSchema } from './schema.js';
 import type { Config, ServerOptions, ResolvedConfig } from './types.js';
 
 const CONFIG_FILE_NAMES = [
-  'csvcms.config.yaml',
-  'csvcms.config.yml',
-  'csvcms.yaml',
-  'csvcms.yml',
-  '.csvcms.yaml',
-  '.csvcms.yml',
+  'csvms.config.yaml',
+  'csvms.config.yml',
+  'csvms.yaml',
+  'csvms.yml',
+  '.csvms.yaml',
+  '.csvms.yml',
 ];
 
 /**

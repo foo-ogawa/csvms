@@ -54,11 +54,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>{singleDataset?.title || 'Dataset'}</span>
           </div>
         ) : (
-          // 通常モード: CSV CMS ロゴ + Homeボタン
+          // 通常モード: CSVMS ロゴ + Homeボタン
           <>
             <Link to="/" className="logo">
               <DatabaseOutlined />
-              <span>CSV CMS</span>
+              <span>CSVMS</span>
             </Link>
             {!isHomePage && (
               <Tooltip title="ホームに戻る">

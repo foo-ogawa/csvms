@@ -67,9 +67,9 @@ export function createApp(config: ResolvedConfig) {
         res.status(200).send(`
           <!DOCTYPE html>
           <html>
-          <head><title>CSV CMS</title></head>
+          <head><title>CSVMS</title></head>
           <body>
-            <h1>CSV CMS Server</h1>
+            <h1>CSVMS Server</h1>
             <p>API is running at <a href="/api/health">/api/health</a></p>
             <p>Frontend not built. Run <code>cd frontend && npm run build</code></p>
           </body>

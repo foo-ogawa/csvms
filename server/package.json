@@ -1,12 +1,11 @@
 {
-  "name": "@csvcms/cli",
+  "name": "@csvms/cli",
   "version": "1.0.0",
-  "description": "CSV CMS - Edit CSV files with a CMS-like UI",
+  "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "csv-cms": "./dist/cli.js",
-    "csvcms": "./dist/cli.js"
+    "csvms": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -30,7 +29,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/csvcms.git"
+    "url": "https://github.com/your-org/csvms.git"
   },
   "dependencies": {
     "commander": "^12.1.0",

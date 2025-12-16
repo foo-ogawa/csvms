@@ -1,31 +1,31 @@
-# CSV CMS 設定仕様
+# CSVMS 設定仕様
 
-このドキュメントでは、CSV CMSの設定ファイル（`csvcms.config.yaml`）とスキーマファイルの詳細仕様を説明します。
+このドキュメントでは、CSVMSの設定ファイル（`csvms.config.yaml`）とスキーマファイルの詳細仕様を説明します。
 
 ---
 
 ## 目次
 
-1. [設定ファイル（csvcms.config.yaml）](#1-設定ファイルcsvcmsconfigyaml)
+1. [設定ファイル（csvms.config.yaml）](#1-設定ファイルcsvmsconfigyaml)
 2. [スキーマファイル](#2-スキーマファイル)
 3. [CLIオプション](#3-cliオプション)
 4. [サンプル](#4-サンプル)
 
 ---
 
-## 1. 設定ファイル（csvcms.config.yaml）
+## 1. 設定ファイル（csvms.config.yaml）
 
 ### 1.1 概要
 
-設定ファイルはワークスペースのルートに配置し、CSV CMSの動作とデータセットの定義を行います。
+設定ファイルはワークスペースのルートに配置し、CSVMSの動作とデータセットの定義を行います。
 
 ### 1.2 探索順序
 
 以下の順序でファイルを探索します（CWD基準）：
 
-1. `csvcms.config.yaml`
-2. `csvcms.config.yml`
-3. `csvcms.config.json`
+1. `csvms.config.yaml`
+2. `csvms.config.yml`
+3. `csvms.config.json`
 
 ### 1.3 構造
 
@@ -373,7 +373,7 @@ expr: "startsWith(id, 'PRD-')"
 ## 3. CLIオプション
 
 ```bash
-npx csv-cms [options]
+npx csvms [options]
 ```
 
 | オプション | 説明 | デフォルト |
@@ -395,13 +395,13 @@ npx csv-cms [options]
 
 ```bash
 # スキーマファイルのみ指定（CSVは自動探索）
-npx csv-cms --schema schemas/product.schema.yaml
+npx csvms --schema schemas/product.schema.yaml
 
 # CSVファイルも明示指定
-npx csv-cms --schema schemas/product.schema.yaml --csv data/products.csv
+npx csvms --schema schemas/product.schema.yaml --csv data/products.csv
 
 # 書き込み許可付き
-npx csv-cms --schema schemas/product.schema.yaml --allow-write
+npx csvms --schema schemas/product.schema.yaml --allow-write
 ```
 
 **単独モードの特徴**:
@@ -416,7 +416,7 @@ npx csv-cms --schema schemas/product.schema.yaml --allow-write
 ### 4.1 設定ファイル例
 
 ```yaml
-# csvcms.config.yaml
+# csvms.config.yaml
 version: 1
 
 workspace:
@@ -542,7 +542,7 @@ validation:
 
 ```
 my-project/
-├── csvcms.config.yaml      # 設定ファイル
+├── csvms.config.yaml       # 設定ファイル
 ├── data/                   # CSVファイル
 │   ├── products.csv
 │   └── categories.csv

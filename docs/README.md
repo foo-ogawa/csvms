@@ -1,5 +1,5 @@
 
-# CSV CMS 要求仕様
+# CSVMS 要求仕様
 
 ## 1. 目的
 
@@ -16,7 +16,7 @@
 
 * 利用者が編集したいリポジトリ/ディレクトリで以下を実行
 
-  * `npx @your-scope/csv-cms`
+  * `npx @csvms/cli`
 * アプリは **CWD（実行ディレクトリ）をWorkspace root**として扱う
 * CWD配下の設定ファイルを読み込み、対象CSV/スキーマを自動的に認識する
 
@@ -26,7 +26,7 @@
 
   * `data/*.csv`
   * `schemas/*.yaml`
-  * `csvcms.config.yaml`
+  * `csvms.config.yaml`
 
 ---
 
@@ -81,7 +81,7 @@
 
 ### 5.1 コマンド
 
-* `npx @your-scope/csv-cms [options]`
+* `npx @csvms/cli [options]`
 
 ### 5.2 オプション（案）
 
@@ -102,13 +102,13 @@
 
 ```bash
 # スキーマファイルを指定（CSVは自動探索）
-npx csv-cms --schema schemas/product.schema.yaml
+npx csvms --schema schemas/product.schema.yaml
 
 # CSVファイルも明示指定
-npx csv-cms --schema schemas/product.schema.yaml --csv data/products.csv
+npx csvms --schema schemas/product.schema.yaml --csv data/products.csv
 
 # 書き込み許可も付与
-npx csv-cms --schema schemas/product.schema.yaml --allow-write
+npx csvms --schema schemas/product.schema.yaml --allow-write
 ```
 
 **単独モードの特徴**:
@@ -137,9 +137,9 @@ npx csv-cms --schema schemas/product.schema.yaml --allow-write
 
 * デフォルトで以下を順に探索（CWD基準）
 
-  1. `csvcms.config.yaml`
-  2. `csvcms.config.yml`
-  3. `csvcms.config.json`
+  1. `csvms.config.yaml`
+  2. `csvms.config.yml`
+  3. `csvms.config.json`
 * 見つからない場合：起動はするが「手動でCSV/スキーマを選択」モード（MVPでは推奨しないが可）
 
 ### 6.2 設定フォーマット（例：YAML）
@@ -533,7 +533,7 @@ validation:
 
 ```
 my-repo/
-  csvcms.config.yaml
+  csvms.config.yaml
   data/
     products.csv
   schemas/

@@ -1,8 +1,8 @@
 {
-  "name": "@csvcms/monorepo",
+  "name": "@csvms/monorepo",
   "private": true,
   "version": "1.0.0",
-  "description": "CSV CMS - Edit CSV files with a CMS-like UI",
+  "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "workspaces": [
     "server",
     "frontend"

@@ -1,4 +1,4 @@
-# CSV CMS
+# CSVMS
 
 ローカルのCSVファイルを**CMS風UI（一覧 + 詳細フォーム）**で編集できるツール。
 
@@ -33,7 +33,7 @@ Git差分が見やすく安定するよう、保存時にCSVを正規化（列�
 `--schema`オプションで設定ファイル不要の単独データセット編集が可能です。サイドバーが非表示になり、シンプルなレイアウトで表示されます。
 
 ```bash
-npx csv-cms --schema schemas/product.schema.yaml --allow-write
+npx csvms --schema schemas/product.schema.yaml --allow-write
 ```
 
 ![単独モード](docs/images/single-dataset.png)
@@ -44,15 +44,15 @@ npx csv-cms --schema schemas/product.schema.yaml --allow-write
 
 ```bash
 # 編集したいCSVがあるディレクトリで実行
-npx @csvcms/cli
+npx @csvms/cli
 ```
 
 ### ローカル開発
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/your-org/csvcms.git
-cd csvcms
+git clone https://github.com/your-org/csvms.git
+cd csvms
 
 # 依存関係をインストール
 npm install
@@ -67,7 +67,7 @@ npm start -- --workspace ./sample
 ## 起動オプション
 
 ```bash
-csv-cms [options]
+csvms [options]
 
 Options:
   --config <path>      設定ファイルパス（デフォルト：CWD探索）
@@ -82,7 +82,7 @@ Options:
 
 ## 設定ファイル
 
-プロジェクトルートに `csvcms.config.yaml` を配置：
+プロジェクトルートに `csvms.config.yaml` を配置：
 
 ```yaml
 version: 1
@@ -169,7 +169,7 @@ npm run lint
 ## ディレクトリ構成
 
 ```
-csvcms/
+csvms/
 ├── frontend/          # React SPA
 │   ├── src/
 │   └── vite.config.ts
@@ -178,7 +178,7 @@ csvcms/
 │   └── dist/
 │       └── frontend/  # ビルド済みフロントエンド
 ├── sample/            # サンプル設定・データ
-│   ├── csvcms.config.yaml
+│   ├── csvms.config.yaml
 │   ├── data/
 │   └── schemas/
 └── docs/              # ドキュメント

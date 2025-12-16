@@ -28,7 +28,7 @@ export async function startServer(options: ServerOptions = {}): Promise<void> {
     const server = app.listen(port, config.serverOptions.host, () => {
       const url = `http://${config.serverOptions.host}:${port}`;
       logger.info({ url, port }, 'Server started');
-      console.log(`\n  CSV CMS is running at: ${url}\n`);
+      console.log(`\n  CSVMS is running at: ${url}\n`);
 
       // ブラウザ起動
       if (config.serverOptions.open) {

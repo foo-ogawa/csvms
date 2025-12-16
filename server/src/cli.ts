@@ -6,8 +6,8 @@ import { program } from 'commander';
 import { startServer } from './index.js';
 
 program
-  .name('csv-cms')
-  .description('CSV CMS - Edit CSV files with a CMS-like UI')
+  .name('csvms')
+  .description('CSVMS - Edit CSV files with a CMS-like UI')
   .version('1.0.0')
   .option('--config <path>', 'Config file path')
   .option('--port <number>', 'Port number', parseInt)
