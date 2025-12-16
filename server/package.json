@@ -1,18 +1,36 @@
 {
-  "name": "csv-cms-server",
+  "name": "@csvcms/cli",
   "version": "1.0.0",
-  "description": "CSV CMS Server - Edit CSV files with a CMS-like UI",
+  "description": "CSV CMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "csv-cms": "./dist/cli.js"
+    "csv-cms": "./dist/cli.js",
+    "csvcms": "./dist/cli.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsx watch src/cli.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/cli.js",
     "test": "vitest",
     "test:run": "vitest run",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint src --ext .ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "csv",
+    "cms",
+    "editor",
+    "git",
+    "data"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/csvcms.git"
   },
   "dependencies": {
     "commander": "^12.1.0",
@@ -31,8 +49,8 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.1",
     "@types/papaparse": "^5.3.15",
-    "supertest": "^7.0.0",
     "@types/supertest": "^6.0.2",
+    "supertest": "^7.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
@@ -42,4 +60,3 @@
   },
   "type": "module"
 }
-

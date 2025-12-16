@@ -48,7 +48,9 @@ parser.functions['max'] = Math.max;
 export function evaluateExpr(expr: string, variables: Record<string, unknown>): boolean {
   try {
     const parsed = parser.parse(expr);
-    return !!parsed.evaluate(variables);
+    // expr-evalの型定義と実際の動作に差異があるため、型アサーションを使用
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return !!parsed.evaluate(variables as any);
   } catch {
     // 式のパースエラーは false として扱う（安全側）
     return false;

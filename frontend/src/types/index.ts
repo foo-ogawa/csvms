@@ -1,4 +1,11 @@
-export * from './schema';
-export * from './dataset';
-export * from './validation';
+// 型定義のエクスポート
+// API型を再エクスポート
 
+export type {
+  Schema,
+  Column,
+  Row,
+  ValidationError,
+  DatasetSummary,
+  DatasetMeta,
+} from '@/api/types';

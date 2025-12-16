@@ -1,6 +1,5 @@
 // 数値フィールドウィジェット
 
-import React from 'react';
 import { Form, InputNumber } from 'antd';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 import { useController } from 'react-hook-form';

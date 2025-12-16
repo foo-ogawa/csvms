@@ -51,7 +51,8 @@ export function createApp(config: ResolvedConfig) {
   app.use('/api', createApiRouter(config, datasetService));
 
   // SPA静的ファイル配信
-  const frontendPath = path.resolve(__dirname, '../../frontend/dist');
+  // ビルド後: server/dist/app.js から server/dist/frontend を参照
+  const frontendPath = path.resolve(__dirname, 'frontend');
   app.use(express.static(frontendPath));
 
   // SPA フォールバック

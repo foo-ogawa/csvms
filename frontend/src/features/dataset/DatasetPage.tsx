@@ -8,6 +8,7 @@ import { useDatasetStore } from '@/stores/datasetStore';
 import { DataList } from '@/components/DataList';
 import { Resizer } from '@/components/Layout';
 import { EditPanel } from './EditPanel';
+import type { Row } from '@/api/types';
 
 export const DatasetPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,7 +53,7 @@ export const DatasetPage: React.FC = () => {
   const selectedRow = selectedRowIndex !== null ? rows[selectedRowIndex] : null;
 
   // フォーム変更ハンドラ
-  const handleFormChange = (values: Partial<typeof selectedRow>) => {
+  const handleFormChange = (values: Partial<Row>) => {
     if (selectedRowIndex !== null) {
       updateRow(selectedRowIndex, values);
     }

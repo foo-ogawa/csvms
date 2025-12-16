@@ -1,9 +1,9 @@
 // 動的フォーム生成コンポーネント
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { Form, Card } from 'antd';
 import { useForm } from 'react-hook-form';
-import type { Schema, Row, ValidationError } from '@/types';
+import type { Schema, Row, ValidationError } from '@/api/types';
 import {
   TextField,
   NumberField,
@@ -31,36 +31,58 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   onChange,
   readOnly = false,
 }) => {
-  // フォーム初期値
-  const defaultValues = React.useMemo(() => {
+  // 現在の行インデックスを追跡
+  const currentRowIndexRef = useRef<number>(row._rowIndex);
+  const isInitializedRef = useRef(false);
+
+  // フォーム初期値を計算（行が変わったときのみ）
+  const getDefaultValues = useCallback(() => {
     const values: Record<string, unknown> = {};
     schema.columns.forEach((col) => {
-      values[col.key] = row[col.key] ?? col.defaultValue ?? '';
+      values[col.key] = row[col.key] ?? col.default ?? '';
     });
     return values;
   }, [schema.columns, row]);
 
   const { control, watch, reset } = useForm({
-    defaultValues,
+    defaultValues: getDefaultValues(),
     mode: 'onChange',
   });
 
-  // 行が変わったらフォームをリセット
+  // 行が変わったときのみフォームをリセット
   useEffect(() => {
-    reset(defaultValues);
-  }, [row._rowIndex, reset, defaultValues]);
+    if (currentRowIndexRef.current !== row._rowIndex) {
+      currentRowIndexRef.current = row._rowIndex;
+      isInitializedRef.current = false;
+      reset(getDefaultValues());
+    }
+  }, [row._rowIndex, reset, getDefaultValues]);
 
-  // フォーム値の変更を監視
+  // 初期化完了フラグ
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      isInitializedRef.current = true;
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [row._rowIndex]);
+
+  // フォーム値の変更を監視（デバウンス付き）
   useEffect(() => {
     const subscription = watch((values) => {
-      onChange(values);
+      // 初期化中は変更を通知しない
+      if (!isInitializedRef.current) return;
+      
+      // 同じ行の場合のみ変更を通知
+      if (currentRowIndexRef.current === row._rowIndex) {
+        onChange(values);
+      }
     });
     return () => subscription.unsubscribe();
-  }, [watch, onChange]);
+  }, [watch, onChange, row._rowIndex]);
 
   // フィールドのエラー取得
   const getFieldError = (columnKey: string): string | undefined => {
-    const fieldError = errors.find((e) => e.column === columnKey);
+    const fieldError = errors.find((e) => e.columnKey === columnKey);
     return fieldError?.message;
   };
 
@@ -69,11 +91,14 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
     const col = schema.columns.find((c) => c.key === columnKey);
     if (!col) return null;
 
+    // 編集時にreadOnlyになるフィールド
+    const isReadOnlyField = readOnly || (!isNew && col.ui?.readonlyOnEdit);
+
     const commonProps = {
       name: col.key as never,
       label: col.label,
       required: col.required,
-      readOnly,
+      readOnly: isReadOnlyField,
       helpText: col.ui?.helpText || getFieldError(col.key),
       control,
     };
@@ -160,7 +185,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
             style={{ marginBottom: 16 }}
           >
             <div
-              className={`form-grid columns-${layout.columns || 1}`}
+              className={`form-grid columns-${section.columns || layout.columns || 1}`}
             >
               {section.fields.map((fieldKey) => renderField(fieldKey))}
             </div>
@@ -179,4 +204,3 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
     </Form>
   );
 };
-

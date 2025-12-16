@@ -1,11 +1,12 @@
 // アプリ全体状態管理
 
 import { create } from 'zustand';
-import type { Config } from '@/types';
-import { mockConfig } from '@/mocks/data';
+import { datasetsApi } from '@/api';
+import type { ConfigResponse, DatasetSummary } from '@/api/types';
 
 interface AppState {
-  config: Config | null;
+  config: ConfigResponse | null;
+  datasets: DatasetSummary[];
   isReadOnly: boolean;
   isLoading: boolean;
   error: Error | null;
@@ -13,12 +14,14 @@ interface AppState {
 
   // Actions
   loadConfig: () => Promise<void>;
+  loadDatasets: () => Promise<void>;
   setSidebarCollapsed: (collapsed: boolean) => void;
   setReadOnly: (readOnly: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
   config: null,
+  datasets: [],
   isReadOnly: false,
   isLoading: false,
   error: null,
@@ -27,19 +30,30 @@ export const useAppStore = create<AppState>((set) => ({
   loadConfig: async () => {
     set({ isLoading: true, error: null });
     try {
-      // モックデータを使用（本番ではAPIコール）
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      set({
-        config: mockConfig,
-        isReadOnly: !mockConfig.workspace.allowWrite,
-        isLoading: false,
-      });
+      const response = await datasetsApi.getConfig();
+      if (response.ok) {
+        set({
+          config: response.data,
+          isReadOnly: !response.data.workspace.allowWrite,
+          isLoading: false,
+        });
+      }
     } catch (error) {
       set({ error: error as Error, isLoading: false });
+    }
+  },
+
+  loadDatasets: async () => {
+    try {
+      const response = await datasetsApi.getDatasets();
+      if (response.ok) {
+        set({ datasets: response.data.datasets });
+      }
+    } catch (error) {
+      console.error('Failed to load datasets:', error);
     }
   },
 
   setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
   setReadOnly: (readOnly) => set({ isReadOnly: readOnly }),
 }));
-

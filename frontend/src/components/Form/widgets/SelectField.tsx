@@ -1,6 +1,5 @@
 // セレクトフィールドウィジェット（enum用）
 
-import React from 'react';
 import { Form, Select } from 'antd';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 import { useController } from 'react-hook-form';

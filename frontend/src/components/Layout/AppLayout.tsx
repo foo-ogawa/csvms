@@ -13,26 +13,37 @@ const { Content } = Layout;
 export const AppLayout: React.FC = () => {
   const { id: datasetId } = useParams<{ id: string }>();
 
-  const { config, isReadOnly, isLoading, sidebarCollapsed, loadConfig, setSidebarCollapsed } =
-    useAppStore();
+  const {
+    config,
+    datasets,
+    isReadOnly,
+    isLoading,
+    sidebarCollapsed,
+    loadConfig,
+    loadDatasets,
+    setSidebarCollapsed,
+  } = useAppStore();
 
   const { isDirty, isSaving, detailPanelVisible, save, toggleDetailPanel } = useDatasetStore();
 
   useEffect(() => {
     loadConfig();
-  }, [loadConfig]);
+    loadDatasets();
+  }, [loadConfig, loadDatasets]);
 
   const handleSave = async () => {
     const result = await save();
     if (result.success) {
       message.success('保存しました');
+      // 保存後にdatasets一覧を再読込（件数更新）
+      loadDatasets();
     } else {
-      message.error('保存に失敗しました');
+      message.error(result.error || '保存に失敗しました');
     }
   };
 
   const handleShowDiff = () => {
-    message.info('差分確認機能（モックでは未実装）');
+    message.info('差分確認機能（実装予定）');
   };
 
   // ページ離脱時の警告
@@ -58,7 +69,9 @@ export const AppLayout: React.FC = () => {
           justifyContent: 'center',
         }}
       >
-        <Spin size="large" tip="読み込み中..." />
+        <Spin size="large">
+          <div style={{ padding: 50, textAlign: 'center' }}>読み込み中...</div>
+        </Spin>
       </div>
     );
   }
@@ -78,7 +91,7 @@ export const AppLayout: React.FC = () => {
         <Sidebar
           collapsed={sidebarCollapsed}
           onCollapse={setSidebarCollapsed}
-          datasets={config.datasets}
+          datasets={datasets}
           currentId={datasetId}
         />
         <Content className="app-content">
@@ -88,4 +101,3 @@ export const AppLayout: React.FC = () => {
     </Layout>
   );
 };
-

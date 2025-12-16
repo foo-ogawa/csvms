@@ -8,7 +8,7 @@ import {
   ReloadOutlined,
   ClearOutlined,
 } from '@ant-design/icons';
-import type { Schema, Row, ValidationError } from '@/types';
+import type { Schema, Row, ValidationError } from '@/api/types';
 import type { InsertPosition } from '@/stores/datasetStore';
 import { InsertMenu } from './InsertMenu';
 import { QuickSearch } from './QuickSearch';

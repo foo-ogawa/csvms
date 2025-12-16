@@ -8,7 +8,7 @@ import {
   CheckCircleOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
-import type { Schema, Column } from '@/types';
+import type { Schema, Column } from '@/api/types';
 
 const { Text } = Typography;
 
@@ -17,13 +17,14 @@ interface SchemaViewerProps {
 }
 
 export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
-  // プライマリキーカラム
-  const pkColumn = schema.columns.find((c) => c.primaryKey);
+  // プライマリキー
+  const primaryKey = schema.csv?.primaryKey;
 
   // カラムテーブルのデータ
   const columnTableData = schema.columns.map((col, idx) => ({
-    key: idx,
+    tableKey: idx,
     ...col,
+    isPrimaryKey: col.key === primaryKey,
   }));
 
   // カラムテーブルの列定義
@@ -32,9 +33,9 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
       title: 'カラム名',
       dataIndex: 'key',
       key: 'key',
-      render: (key: string, record: Column) => (
+      render: (key: string, record: Column & { isPrimaryKey?: boolean }) => (
         <span>
-          {record.primaryKey && (
+          {record.isPrimaryKey && (
             <KeyOutlined style={{ color: '#faad14', marginRight: 4 }} />
           )}
           <Text code>{key}</Text>
@@ -76,6 +77,8 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
     },
   ];
 
+  const normalize = schema.csv?.normalize;
+
   return (
     <div className="schema-viewer">
       {/* 基本情報 */}
@@ -84,18 +87,10 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
         <Descriptions column={1} size="small" bordered>
           <Descriptions.Item label="ID">{schema.id}</Descriptions.Item>
           <Descriptions.Item label="タイトル">{schema.title}</Descriptions.Item>
-          {schema.description && (
-            <Descriptions.Item label="説明">
-              {schema.description}
-            </Descriptions.Item>
-          )}
-          <Descriptions.Item label="CSVパス">
-            <Text code>{schema.csvPath}</Text>
-          </Descriptions.Item>
-          {pkColumn && (
+          {primaryKey && (
             <Descriptions.Item label="Primary Key">
               <Tag icon={<KeyOutlined />} color="gold">
-                {pkColumn.key}
+                {primaryKey}
               </Tag>
             </Descriptions.Item>
           )}
@@ -110,6 +105,7 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
         <Table
           dataSource={columnTableData}
           columns={columnTableColumns}
+          rowKey="tableKey"
           pagination={false}
           size="small"
           bordered
@@ -128,7 +124,7 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
                 <Text>{rule.message}</Text>
                 <br />
                 <Text code style={{ fontSize: 11 }}>
-                  {rule.expression}
+                  {rule.expr}
                 </Text>
               </li>
             ))}
@@ -137,27 +133,27 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
       )}
 
       {/* 正規化設定 */}
-      {schema.normalize && (
+      {normalize && (
         <div className="schema-viewer-section">
           <h4>正規化設定</h4>
           <Descriptions column={1} size="small">
-            {schema.normalize.sort && (
+            {normalize.sortKeys && normalize.sortKeys.length > 0 && (
               <Descriptions.Item label="ソート">
-                {schema.normalize.sort.map((s, idx) => (
+                {normalize.sortKeys.map((s, idx) => (
                   <Tag key={idx}>
                     {s.column} ({s.order})
                   </Tag>
                 ))}
               </Descriptions.Item>
             )}
-            {schema.normalize.quote && (
+            {normalize.quotePolicy && (
               <Descriptions.Item label="クォート">
-                {schema.normalize.quote}
+                {normalize.quotePolicy}
               </Descriptions.Item>
             )}
-            {schema.normalize.newline && (
+            {normalize.newline && (
               <Descriptions.Item label="改行コード">
-                {schema.normalize.newline}
+                {normalize.newline.toUpperCase()}
               </Descriptions.Item>
             )}
           </Descriptions>
@@ -166,4 +162,3 @@ export const SchemaViewer: React.FC<SchemaViewerProps> = ({ schema }) => {
     </div>
   );
 };
-

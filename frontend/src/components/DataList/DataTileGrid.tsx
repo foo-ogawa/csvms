@@ -8,7 +8,7 @@ import {
   ArrowUpOutlined,
   ArrowDownOutlined,
 } from '@ant-design/icons';
-import type { Schema, Row, ValidationError } from '@/types';
+import type { Schema, Row, ValidationError } from '@/api/types';
 import type { InsertPosition } from '@/stores/datasetStore';
 
 interface DataTileGridProps {
@@ -91,7 +91,8 @@ export const DataTileGrid: React.FC<DataTileGridProps> = ({
   ];
 
   // プライマリキー取得
-  const pkColumn = schema.columns.find((c) => c.primaryKey);
+  const primaryKey = schema.csv?.primaryKey;
+  const pkColumn = primaryKey ? schema.columns.find((c) => c.key === primaryKey) : schema.columns[0];
 
   if (rows.length === 0) {
     return (
@@ -104,7 +105,8 @@ export const DataTileGrid: React.FC<DataTileGridProps> = ({
   return (
     <div className={`tile-grid columns-${tileConfig.columns}`} style={{ alignContent: 'flex-start' }}>
       {rows.map((row, index) => {
-        const title = row[tileConfig.titleField];
+        const titleField = tileConfig.titleField || schema.columns[0]?.key;
+        const title = titleField ? row[titleField] : row._rowIndex;
         const subtitle = tileConfig.subtitleField
           ? row[tileConfig.subtitleField]
           : undefined;

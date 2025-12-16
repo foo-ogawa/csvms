@@ -1,6 +1,5 @@
 // テキストフィールドウィジェット
 
-import React from 'react';
 import { Form, Input } from 'antd';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 import { useController } from 'react-hook-form';

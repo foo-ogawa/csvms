@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Layout, Menu, Badge, Tooltip } from 'antd';
-import { TableOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import type { DatasetSummary } from '@/types';
+import { Layout, Menu, Tooltip } from 'antd';
+import { TableOutlined } from '@ant-design/icons';
+import type { DatasetSummary } from '@/api/types';
 
 const { Sider } = Layout;
 
@@ -38,13 +38,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             ({ds.rowCount})
           </span>
         </span>
-        {ds.errorCount > 0 && (
-          <Badge
-            count={ds.errorCount}
-            size="small"
-            style={{ backgroundColor: '#ff4d4f' }}
-          />
-        )}
       </div>
     ),
   }));
@@ -73,22 +66,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         onClick={({ key }) => navigate(`/datasets/${key}`)}
         items={menuItems}
       />
-      {datasets.length > 0 && datasets.some((d) => d.errorCount > 0) && !collapsed && (
-        <div
-          style={{
-            padding: '8px 16px',
-            color: 'rgba(255,255,255,0.45)',
-            fontSize: 11,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 4,
-          }}
-        >
-          <ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />
-          <span>エラーのあるデータセットがあります</span>
-        </div>
-      )}
     </Sider>
   );
 };
-

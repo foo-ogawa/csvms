@@ -10,7 +10,8 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../dist',
+    outDir: '../server/dist/frontend',
+    emptyOutDir: true,
     sourcemap: false,
     minify: 'esbuild',
   },

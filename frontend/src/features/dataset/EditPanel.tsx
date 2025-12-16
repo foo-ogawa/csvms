@@ -1,9 +1,9 @@
 // 編集パネルコンポーネント
 
 import React from 'react';
-import { Button, Space, Popconfirm, Tag, Tooltip, Empty } from 'antd';
+import { Button, Space, Popconfirm, Tag, Tooltip } from 'antd';
 import { CopyOutlined, DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import type { Schema, Row, ValidationError } from '@/types';
+import type { Schema, Row, ValidationError } from '@/api/types';
 import { DynamicForm } from '@/components/Form';
 import { SchemaViewer } from '@/components/SchemaViewer';
 
@@ -32,7 +32,8 @@ export const EditPanel: React.FC<EditPanelProps> = ({
   const rowErrors = errors.filter((e) => e.rowIndex === rowIndex);
 
   // プライマリキーのカラム
-  const pkColumn = schema.columns.find((c) => c.primaryKey);
+  const primaryKey = schema.csv?.primaryKey;
+  const pkColumn = primaryKey ? schema.columns.find((c) => c.key === primaryKey) : null;
   const pkValue = row && pkColumn ? row[pkColumn.key] : null;
 
   // 未選択時はスキーマ表示
@@ -97,7 +98,7 @@ export const EditPanel: React.FC<EditPanelProps> = ({
         <DynamicForm
           schema={schema}
           row={row}
-          isNew={row._isNew}
+          isNew={row._isNew ?? false}
           errors={rowErrors}
           onChange={onChange}
           readOnly={readOnly}
@@ -106,4 +107,3 @@ export const EditPanel: React.FC<EditPanelProps> = ({
     </div>
   );
 };
-

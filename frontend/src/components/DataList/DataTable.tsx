@@ -11,7 +11,7 @@ import {
   ArrowUpOutlined,
   ArrowDownOutlined,
 } from '@ant-design/icons';
-import type { Schema, Row, ValidationError } from '@/types';
+import type { Schema, Row, ValidationError } from '@/api/types';
 import type { InsertPosition } from '@/stores/datasetStore';
 
 interface DataTableProps {
@@ -102,7 +102,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   );
 
   // セル値のフォーマット
-  const formatValue = (value: unknown, type: string): React.ReactNode => {
+  const formatValue = (value: unknown, type: string, columnKey: string): React.ReactNode => {
     if (value === undefined || value === null || value === '') {
       return <span style={{ color: '#bfbfbf' }}>-</span>;
     }
@@ -116,8 +116,8 @@ export const DataTable: React.FC<DataTableProps> = ({
     }
 
     if (type === 'enum') {
-      const enumCol = schema.columns.find((c) => c.type === 'enum');
-      const option = enumCol?.enum?.find((e) => e.value === value);
+      const col = schema.columns.find((c) => c.key === columnKey);
+      const option = col?.enum?.find((e) => e.value === value);
       return <Tag>{option?.label || String(value)}</Tag>;
     }
 
@@ -232,7 +232,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                       className="table-cell"
                       style={{ width: col.width, minWidth: col.width }}
                     >
-                      {formatValue(row[col.key], col.type)}
+                      {formatValue(row[col.key], col.type, col.key)}
                     </div>
                   ))}
                 </div>

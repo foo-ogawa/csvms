@@ -1,5 +1,5 @@
 category_id,name,description,parent_id,sort_order,is_active
 ELECTRONICS,電子機器,PC・モニター・周辺機器,,1,true
-ACCESSORIES,アクセサリー,マウス・キーボード等,ELECTRONICS,2,true
+ACCESSORIES,アクセサリー,マウス・キーボード等ああああ,ELECTRONICS,2,true
 FURNITURE,家具・什器,デスク・チェア等,,3,true
 SOFTWARE,ソフトウェア（更新済み）,アプリケーション・ライセンス,,4,true
