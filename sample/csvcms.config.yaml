@@ -1,0 +1,23 @@
+# CSV CMS 設定ファイル
+
+version: 1
+
+workspace:
+  root: "."
+  allowWrite: true
+  # allowGlobs:
+  #   - "data/**/*.csv"
+  # denyGlobs:
+  #   - "**/.git/**"
+
+datasets:
+  - id: product_master
+    title: 商品マスタ
+    csvPath: data/products.csv
+    schemaPath: schemas/products.schema.yaml
+
+  - id: category_master
+    title: カテゴリマスタ
+    csvPath: data/categories.csv
+    schemaPath: schemas/categories.schema.yaml
+

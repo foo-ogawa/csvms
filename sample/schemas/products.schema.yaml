@@ -1,0 +1,141 @@
+# 商品マスタスキーマ
+
+schemaVersion: 1
+id: product_master
+title: 商品マスタ
+
+csv:
+  delimiter: ","
+  header: true
+  primaryKey: product_id
+  normalize:
+    sortKeys:
+      - column: product_id
+        order: asc
+    quotePolicy: minimal
+    newline: lf
+    encoding: utf-8
+    bom: false
+
+columns:
+  - key: product_id
+    label: 商品ID
+    type: string
+    required: true
+    unique: true
+    pattern: "^[A-Z0-9_-]{3,32}$"
+    ui:
+      widget: text
+      readonlyOnEdit: true
+
+  - key: name
+    label: 商品名
+    type: string
+    required: true
+    ui:
+      widget: text
+
+  - key: description
+    label: 説明
+    type: string
+    ui:
+      widget: textarea
+
+  - key: category_id
+    label: カテゴリID
+    type: string
+    required: true
+    ui:
+      widget: text
+
+  - key: status
+    label: 状態
+    type: enum
+    required: true
+    default: draft
+    enum:
+      - value: active
+        label: 公開
+      - value: draft
+        label: 下書き
+      - value: archived
+        label: アーカイブ
+    ui:
+      widget: select
+
+  - key: price
+    label: 価格
+    type: integer
+    required: true
+    default: 0
+    min: 0
+    ui:
+      widget: number
+      step: 1
+
+  - key: stock
+    label: 在庫数
+    type: integer
+    default: 0
+    min: 0
+    ui:
+      widget: number
+      step: 1
+
+  - key: created_at
+    label: 作成日
+    type: date
+    ui:
+      widget: date
+
+ui:
+  list:
+    columns:
+      - key: product_id
+        width: 160
+        pinned: true
+      - key: name
+        width: 280
+      - key: category_id
+        width: 120
+      - key: status
+        width: 100
+      - key: price
+        width: 120
+        align: right
+      - key: stock
+        width: 100
+        align: right
+    quickSearch:
+      columns:
+        - product_id
+        - name
+
+  form:
+    layout:
+      type: sections
+      sections:
+        - title: 基本情報
+          columns: 2
+          fields:
+            - product_id
+            - name
+            - description
+            - category_id
+        - title: ステータス
+          columns: 2
+          fields:
+            - status
+            - price
+            - stock
+            - created_at
+
+validation:
+  rowRules:
+    - id: active_price_positive
+      message: 公開中の商品は価格が1以上である必要があります
+      expr: "status != 'active' or price >= 1"
+    - id: active_stock_required
+      message: 公開中の商品は在庫が必要です
+      expr: "status != 'active' or stock > 0"
+

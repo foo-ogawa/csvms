@@ -1,0 +1,105 @@
+# カテゴリマスタスキーマ
+
+schemaVersion: 1
+id: category_master
+title: カテゴリマスタ
+
+csv:
+  delimiter: ","
+  header: true
+  primaryKey: category_id
+  normalize:
+    sortKeys:
+      - column: sort_order
+        order: asc
+      - column: category_id
+        order: asc
+    quotePolicy: minimal
+    newline: lf
+    encoding: utf-8
+    bom: false
+
+columns:
+  - key: category_id
+    label: カテゴリID
+    type: string
+    required: true
+    unique: true
+    pattern: "^[A-Z0-9_-]{2,16}$"
+    ui:
+      widget: text
+      readonlyOnEdit: true
+
+  - key: name
+    label: カテゴリ名
+    type: string
+    required: true
+    ui:
+      widget: text
+
+  - key: description
+    label: 説明
+    type: string
+    ui:
+      widget: textarea
+
+  - key: parent_id
+    label: 親カテゴリID
+    type: string
+    ui:
+      widget: text
+      helpText: ルートカテゴリの場合は空欄
+
+  - key: sort_order
+    label: 表示順
+    type: integer
+    default: 0
+    min: 0
+    ui:
+      widget: number
+      step: 1
+
+  - key: is_active
+    label: 有効
+    type: boolean
+    default: true
+    ui:
+      widget: checkbox
+
+ui:
+  list:
+    columns:
+      - key: category_id
+        width: 140
+        pinned: true
+      - key: name
+        width: 200
+      - key: parent_id
+        width: 140
+      - key: sort_order
+        width: 100
+        align: right
+      - key: is_active
+        width: 80
+    quickSearch:
+      columns:
+        - category_id
+        - name
+
+  form:
+    layout:
+      type: sections
+      sections:
+        - title: 基本情報
+          columns: 2
+          fields:
+            - category_id
+            - name
+            - description
+        - title: 階層・表示
+          columns: 2
+          fields:
+            - parent_id
+            - sort_order
+            - is_active
+

@@ -1,0 +1,45 @@
+{
+  "name": "csv-cms-server",
+  "version": "1.0.0",
+  "description": "CSV CMS Server - Edit CSV files with a CMS-like UI",
+  "main": "dist/index.js",
+  "bin": {
+    "csv-cms": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx watch src/cli.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "express": "^4.21.0",
+    "expr-eval": "^2.0.2",
+    "fast-glob": "^3.3.2",
+    "get-port": "^7.1.0",
+    "open": "^10.1.0",
+    "papaparse": "^5.4.1",
+    "pino": "^9.5.0",
+    "pino-pretty": "^11.3.0",
+    "yaml": "^2.6.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "@types/papaparse": "^5.3.15",
+    "supertest": "^7.0.0",
+    "@types/supertest": "^6.0.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module"
+}
+
