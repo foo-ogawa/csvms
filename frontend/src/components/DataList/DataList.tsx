@@ -77,8 +77,14 @@ export const DataList: React.FC<DataListProps> = ({
     // 検索フィルタ
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
+      const quickSearchColumns = schema.ui?.list?.quickSearch?.columns;
+      // quickSearch.columnsが指定されていればそのカラムのみ、なければ全カラムを検索
+      const searchTargetColumns = quickSearchColumns && quickSearchColumns.length > 0
+        ? schema.columns.filter((col) => quickSearchColumns.includes(col.key))
+        : schema.columns;
+      
       result = result.filter((row) =>
-        schema.columns.some((col) => {
+        searchTargetColumns.some((col) => {
           const value = row[col.key];
           return value !== undefined && String(value).toLowerCase().includes(query);
         })
@@ -115,6 +121,19 @@ export const DataList: React.FC<DataListProps> = ({
 
   // ソートやフィルタがかかっているかどうか（ドラッグ&ドロップの有効/無効に使用）
   const canDragDrop = !sortColumn && !searchQuery;
+
+  // 検索対象カラムのラベルを取得
+  const searchPlaceholder = useMemo(() => {
+    const quickSearchColumns = schema.ui?.list?.quickSearch?.columns;
+    if (!quickSearchColumns || quickSearchColumns.length === 0) {
+      // 全カラムが検索対象
+      return '検索...';
+    }
+    const labels = quickSearchColumns
+      .map((key) => schema.columns.find((col) => col.key === key)?.label || key)
+      .join(', ');
+    return `検索 (${labels})`;
+  }, [schema]);
 
   // selectedRowIndex（元のrows配列のインデックス）をfilteredRowsでの表示インデックスに変換
   const displaySelectedIndex = useMemo(() => {
@@ -161,7 +180,7 @@ export const DataList: React.FC<DataListProps> = ({
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       <div className="data-list-toolbar">
         <div className="data-list-toolbar-left">
-          <QuickSearch value={searchQuery} onChange={onQuickSearch} />
+          <QuickSearch value={searchQuery} onChange={onQuickSearch} placeholder={searchPlaceholder} />
           {sortColumn ? (
             <Button
               icon={<CloseCircleOutlined />}

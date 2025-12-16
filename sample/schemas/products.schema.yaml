@@ -117,8 +117,9 @@ ui:
           fields:
             - product_id
             - name
-            - description
             - category_id
+        - fields:  # titleを省略するとラベルのみ表示
+            - description
         - title: ステータス
           columns: 2
           fields:

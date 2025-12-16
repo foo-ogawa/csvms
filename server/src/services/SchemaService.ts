@@ -63,7 +63,7 @@ const ListColumnSchema = z.object({
 });
 
 const FormSectionSchema = z.object({
-  title: z.string(),
+  title: z.string().optional(),  // 省略可能：省略時はタイトルなしで表示
   columns: z.number().optional(),
   fields: z.array(z.string()),
 });

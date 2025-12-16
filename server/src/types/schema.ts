@@ -85,7 +85,7 @@ export interface FormLayout {
 }
 
 export interface FormSection {
-  title: string;
+  title?: string;  // 省略可能：省略時はタイトルなしで表示
   columns?: number;
   fields: string[];
 }

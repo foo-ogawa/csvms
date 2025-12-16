@@ -181,8 +181,9 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
           <Card
             key={idx}
             size="small"
-            title={section.title}
+            title={section.title || undefined}
             style={{ marginBottom: 16 }}
+            styles={section.title ? undefined : { body: { paddingTop: 16 } }}
           >
             <div
               className={`form-grid columns-${section.columns || layout.columns || 1}`}

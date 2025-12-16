@@ -93,7 +93,7 @@ export interface Schema {
       layout?: {
         type: 'flat' | 'sections';
         columns?: number;
-        sections?: { title: string; columns?: number; fields: string[] }[];
+        sections?: { title?: string; columns?: number; fields: string[] }[];
       };
     };
   };
