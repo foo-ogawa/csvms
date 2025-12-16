@@ -1,0 +1,529 @@
+/* グローバルスタイル */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* レイアウト */
+.app-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-layout > .ant-layout {
+  height: calc(100vh - 56px);
+  overflow: hidden;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  height: 56px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.app-header-left .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1677ff;
+  text-decoration: none;
+}
+
+.app-header-left .logo svg {
+  font-size: 24px;
+}
+
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* サイドバー */
+.app-sider {
+  background: #001529 !important;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.app-sider .ant-menu {
+  background: transparent;
+}
+
+.app-sider .ant-menu-item {
+  margin: 4px 8px !important;
+  border-radius: 6px;
+}
+
+.sidebar-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sidebar-item-badges {
+  display: flex;
+  gap: 4px;
+}
+
+/* メインコンテンツ */
+.app-content {
+  background: #fff;
+  margin: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  height: calc(100% - 32px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* データリスト */
+.data-list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.data-list-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.data-list-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* テーブル行スタイル */
+.row-has-error {
+  background-color: #fff2f0 !important;
+}
+
+.row-has-error:hover {
+  background-color: #ffebe6 !important;
+}
+
+.row-is-dirty {
+  background-color: #fffbe6 !important;
+}
+
+.row-is-dirty:hover {
+  background-color: #fff7cc !important;
+}
+
+.row-is-new {
+  background-color: #f6ffed !important;
+}
+
+.row-is-new:hover {
+  background-color: #e6ffe6 !important;
+}
+
+.row-selected {
+  background-color: #e6f4ff !important;
+}
+
+.row-selected:hover {
+  background-color: #d6e8ff !important;
+}
+
+/* タイルグリッド */
+.tile-grid {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.tile-grid.columns-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.tile-grid.columns-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tile-grid.columns-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.tile-card {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tile-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.tile-card.selected {
+  border-color: #1677ff;
+  box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.2);
+}
+
+.tile-card.is-new {
+  border-color: #52c41a;
+  background: linear-gradient(135deg, #f6ffed 0%, #fff 100%);
+}
+
+.tile-card.is-dirty {
+  border-color: #faad14;
+  background: linear-gradient(135deg, #fffbe6 0%, #fff 100%);
+}
+
+.tile-card.has-error {
+  border-color: #ff4d4f;
+  background: linear-gradient(135deg, #fff2f0 0%, #fff 100%);
+}
+
+/* リサイザー */
+.resizer {
+  width: 4px;
+  background: #f0f0f0;
+  cursor: col-resize;
+  flex-shrink: 0;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.resizer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -4px;
+  right: -4px;
+  bottom: 0;
+}
+
+.resizer:hover,
+.resizer.resizing {
+  background: #1677ff;
+}
+
+/* 詳細パネル */
+.detail-panel {
+  background: #fff;
+  border-left: 1px solid #f0f0f0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.detail-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.detail-panel-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.detail-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+}
+
+/* フォームセクション */
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.form-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.form-grid.columns-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.form-grid.columns-1 {
+  grid-template-columns: 1fr;
+}
+
+/* Home画面 */
+.home-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.home-section {
+  margin-bottom: 32px;
+}
+
+.home-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #262626;
+}
+
+.dataset-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.dataset-card {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dataset-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.dataset-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dataset-card-header svg {
+  font-size: 20px;
+  color: #1677ff;
+}
+
+.dataset-card-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.config-preview {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Schema Viewer */
+.schema-viewer {
+  padding: 0;
+}
+
+.schema-viewer-section {
+  margin-bottom: 24px;
+}
+
+.schema-viewer-section:last-child {
+  margin-bottom: 0;
+}
+
+.schema-viewer-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.schema-viewer-section h4::before {
+  content: '■';
+  color: #1677ff;
+  font-size: 10px;
+}
+
+.schema-columns-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.schema-columns-table th,
+.schema-columns-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.schema-columns-table th {
+  background: #fafafa;
+  font-weight: 500;
+  color: #666;
+}
+
+.schema-columns-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* 差分プレビュー */
+.diff-preview {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.diff-preview .diff-add {
+  background: rgba(46, 160, 67, 0.3);
+  color: #3fb950;
+}
+
+.diff-preview .diff-remove {
+  background: rgba(248, 81, 73, 0.3);
+  color: #f85149;
+}
+
+/* MDX Editor カスタマイズ */
+.mdxeditor {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.mdxeditor:focus-within {
+  border-color: #1677ff;
+  box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+}
+
+/* データテーブル */
+.data-table-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.data-table-header {
+  display: flex;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.data-table-body {
+  flex: 1;
+  overflow: auto;
+}
+
+.table-cell {
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.header-cell {
+  height: 44px;
+  font-weight: 500;
+  color: #262626;
+  user-select: none;
+}
+
+.header-cell.sortable {
+  cursor: pointer;
+}
+
+.header-cell.sortable:hover {
+  background: #f0f0f0;
+}
+
+.table-row {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.15s;
+}
+
+.table-row:hover {
+  background-color: #f5f5f5;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 12px;
+  }
+
+  .tile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-grid.columns-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .dataset-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
