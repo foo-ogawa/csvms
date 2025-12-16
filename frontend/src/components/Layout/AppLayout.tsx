@@ -1,10 +1,11 @@
 // アプリケーション全体レイアウト
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { Layout, message, Spin } from 'antd';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
+import { DiffPreviewModal } from './DiffPreviewModal';
 import { useAppStore } from '@/stores/appStore';
 import { useDatasetStore } from '@/stores/datasetStore';
 
@@ -26,7 +27,10 @@ export const AppLayout: React.FC = () => {
     setSidebarCollapsed,
   } = useAppStore();
 
-  const { isDirty, isSaving, detailPanelVisible, save, toggleDetailPanel } = useDatasetStore();
+  const { isDirty, isSaving, detailPanelVisible, rows, originalRows, meta, save, toggleDetailPanel } = useDatasetStore();
+
+  // 差分モーダルの状態
+  const [diffModalOpen, setDiffModalOpen] = useState(false);
 
   useEffect(() => {
     loadConfig();
@@ -44,9 +48,14 @@ export const AppLayout: React.FC = () => {
     }
   };
 
-  const handleShowDiff = () => {
-    message.info('差分確認機能（実装予定）');
-  };
+  const handleShowDiff = useCallback(() => {
+    if (!isDirty) return;
+    setDiffModalOpen(true);
+  }, [isDirty]);
+
+  const handleCloseDiffModal = useCallback(() => {
+    setDiffModalOpen(false);
+  }, []);
 
   // ページ離脱時の警告
   useEffect(() => {
@@ -104,6 +113,16 @@ export const AppLayout: React.FC = () => {
           <Outlet />
         </Content>
       </Layout>
+
+      {/* 差分確認モーダル */}
+      <DiffPreviewModal
+        open={diffModalOpen}
+        onClose={handleCloseDiffModal}
+        columns={meta?.schema.columns ?? []}
+        originalRows={originalRows}
+        currentRows={rows}
+        primaryKey={meta?.schema.csv?.primaryKey}
+      />
     </Layout>
   );
 };
