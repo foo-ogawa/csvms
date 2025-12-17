@@ -1,8 +1,18 @@
 {
   "name": "@csvms/monorepo",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
+  "author": "foo-ogawa",
+  "license": "MIT",
+  "homepage": "https://github.com/foo-ogawa/csvms#readme",
+  "bugs": {
+    "url": "https://github.com/foo-ogawa/csvms/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foo-ogawa/csvms.git"
+  },
   "workspaces": [
     "server",
     "frontend"
