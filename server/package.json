@@ -39,8 +39,7 @@
     "url": "git+https://github.com/foo-ogawa/csvms.git"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "dependencies": {
     "commander": "^12.1.0",
