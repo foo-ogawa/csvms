@@ -22,8 +22,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Clean and install dependencies
+        run: |
+          rm -rf node_modules frontend/node_modules server/node_modules
+          rm -f package-lock.json frontend/package-lock.json server/package-lock.json
+          npm install
 
       - name: Build
         run: npm run build

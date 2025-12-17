@@ -44,7 +44,7 @@ npx csvms --schema schemas/product.schema.yaml --allow-write
 
 ```bash
 # 編集したいCSVがあるディレクトリで実行
-npx @csvms/cli
+npx csvms
 ```
 
 ### ローカル開発
