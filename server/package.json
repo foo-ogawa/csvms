@@ -1,6 +1,6 @@
 {
   "name": "@csvms/cli",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,12 +24,22 @@
     "cms",
     "editor",
     "git",
-    "data"
+    "data",
+    "spreadsheet",
+    "admin"
   ],
+  "author": "foo-ogawa",
   "license": "MIT",
+  "homepage": "https://github.com/foo-ogawa/csvms#readme",
+  "bugs": {
+    "url": "https://github.com/foo-ogawa/csvms/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/csvms.git"
+    "url": "git+https://github.com/foo-ogawa/csvms.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "commander": "^12.1.0",
