@@ -1,7 +1,7 @@
 {
   "name": "@csvms/monorepo",
   "private": true,
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "author": "foo-ogawa",
   "license": "MIT",

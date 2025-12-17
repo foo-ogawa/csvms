@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2025-12-17
+
+### Fixed
+- Fix CI workflow: use `npm install` instead of `npm ci` to resolve rollup optional dependencies issue
+
 ## [0.9.0] - 2025-12-17
 
 ### Added
@@ -26,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Path traversal protection
 - Workspace boundary enforcement
 
-[Unreleased]: https://github.com/foo-ogawa/csvms/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/foo-ogawa/csvms/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/foo-ogawa/csvms/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/foo-ogawa/csvms/releases/tag/v0.9.0
 
