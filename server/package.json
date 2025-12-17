@@ -1,6 +1,6 @@
 {
   "name": "csvms",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
