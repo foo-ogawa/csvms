@@ -1,6 +1,6 @@
 {
   "name": "@csvms/cli",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
