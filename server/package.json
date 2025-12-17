@@ -1,6 +1,6 @@
 {
   "name": "@csvms/cli",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,8 +14,8 @@
     "dev": "tsx watch src/cli.ts",
     "build": "tsc",
     "start": "node dist/cli.js",
-    "test": "vitest",
-    "test:run": "vitest run",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
     "lint": "eslint src --ext .ts",
     "prepublishOnly": "npm run build"
   },
