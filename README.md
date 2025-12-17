@@ -51,7 +51,7 @@ npx @csvms/cli
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/your-org/csvms.git
+git clone https://github.com/foo-ogawa/csvms.git
 cd csvms
 
 # 依存関係をインストール
