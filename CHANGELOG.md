@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.4] - 2025-12-17
+
+### Changed
+- Rename package from `@csvms/cli` to `csvms` for simpler installation
+
 ## [0.9.3] - 2025-12-17
 
 ### Fixed
@@ -41,7 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Path traversal protection
 - Workspace boundary enforcement
 
-[Unreleased]: https://github.com/foo-ogawa/csvms/compare/v0.9.3...HEAD
+[Unreleased]: https://github.com/foo-ogawa/csvms/compare/v0.9.4...HEAD
+[0.9.4]: https://github.com/foo-ogawa/csvms/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/foo-ogawa/csvms/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/foo-ogawa/csvms/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/foo-ogawa/csvms/compare/v0.9.0...v0.9.1

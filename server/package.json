@@ -1,6 +1,6 @@
 {
-  "name": "@csvms/cli",
-  "version": "0.9.3",
+  "name": "csvms",
+  "version": "0.9.4",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -37,9 +37,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/foo-ogawa/csvms.git"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "dependencies": {
     "commander": "^12.1.0",
