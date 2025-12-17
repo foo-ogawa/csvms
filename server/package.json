@@ -1,6 +1,6 @@
 {
   "name": "csvms",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,8 @@
     "csvms": "./dist/cli.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "dev": "tsx watch src/cli.ts",

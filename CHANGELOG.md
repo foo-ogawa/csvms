@@ -7,11 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.7] - 2025-12-17
+
+### Added
+- Add README.md to npm package for better documentation on npmjs.com
+
+## [0.9.6] - 2025-12-17
+
+### Fixed
+- Fix npm publish authentication (use Granular Access Token with 2FA bypass)
+
 ## [0.9.5] - 2025-12-17
 
 ### Changed
+- First public release attempt on npm
+
+## [0.9.4] - 2025-12-17
+
+### Changed
 - Rename package from `@csvms/cli` to `csvms` for simpler installation
-- First public release on npm
 
 ## [0.9.3] - 2025-12-17
 
@@ -47,7 +61,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Path traversal protection
 - Workspace boundary enforcement
 
-[Unreleased]: https://github.com/foo-ogawa/csvms/compare/v0.9.5...HEAD
+[Unreleased]: https://github.com/foo-ogawa/csvms/compare/v0.9.7...HEAD
+[0.9.7]: https://github.com/foo-ogawa/csvms/compare/v0.9.6...v0.9.7
+[0.9.6]: https://github.com/foo-ogawa/csvms/compare/v0.9.5...v0.9.6
 [0.9.5]: https://github.com/foo-ogawa/csvms/compare/v0.9.4...v0.9.5
 [0.9.4]: https://github.com/foo-ogawa/csvms/compare/v0.9.3...v0.9.4
 [0.9.3]: https://github.com/foo-ogawa/csvms/compare/v0.9.2...v0.9.3
