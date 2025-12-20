@@ -1,5 +1,8 @@
 # CSVMS
 
+[![npm version](https://img.shields.io/npm/v/csvms.svg)](https://www.npmjs.com/package/csvms)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ローカルのCSVファイルを**CMS風UI（一覧 + 詳細フォーム）**で編集できるツール。
 
 Git差分が見やすく安定するよう、保存時にCSVを正規化（列順・改行・クォート・ソート等）します。
