@@ -3,7 +3,13 @@
 import getPort from 'get-port';
 import open from 'open';
 import { createApp } from './app.js';
-import { loadConfig, type ServerOptions, type ResolvedConfig } from './config/index.js';
+import {
+  loadConfig,
+  validateStartupConfig,
+  printValidationResult,
+  type ServerOptions,
+  type ResolvedConfig,
+} from './config/index.js';
 import { logger, setLogLevel } from './lib/utils/logger.js';
 
 export async function startServer(options: ServerOptions = {}): Promise<void> {
@@ -14,6 +20,15 @@ export async function startServer(options: ServerOptions = {}): Promise<void> {
 
     // ログレベル設定
     setLogLevel(config.serverOptions.logLevel);
+
+    // 起動前バリデーション
+    console.log('Validating configuration...');
+    const validationResult = await validateStartupConfig(config);
+    printValidationResult(validationResult);
+
+    if (!validationResult.valid) {
+      process.exit(1);
+    }
 
     // アプリケーション作成
     const app = createApp(config);

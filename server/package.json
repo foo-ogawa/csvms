@@ -1,6 +1,6 @@
 {
   "name": "csvms",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "CSVMS - Edit CSV files with a CMS-like UI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -40,6 +40,7 @@
     "url": "git+https://github.com/foo-ogawa/csvms.git"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "express": "^4.21.0",
     "expr-eval": "^2.0.2",
