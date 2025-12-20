@@ -203,7 +203,7 @@ function validateCsvHeaders(
   headers: string[],
   schema: Schema,
   dataset: DatasetConfig,
-  csvPath: string,
+  _csvPath: string,
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const schemaColumns = schema.columns.map((c) => c.key);

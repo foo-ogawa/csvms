@@ -3,7 +3,7 @@
 import fs from 'node:fs/promises';
 import YAML from 'yaml';
 import { z } from 'zod';
-import type { Schema, Row, Column, EnumValue } from '../types/index.js';
+import type { Schema, Row, Column } from '../types/index.js';
 
 // スキーマ検証用Zodスキーマ
 const EnumValueSchema = z.object({
